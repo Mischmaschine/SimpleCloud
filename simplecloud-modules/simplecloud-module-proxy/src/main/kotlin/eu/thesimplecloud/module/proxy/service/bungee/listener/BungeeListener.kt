@@ -117,11 +117,10 @@ class BungeeListener(private val plugin: BungeePluginMain) : Listener {
         val maxPlayers = CloudPlugin.instance.thisService().getServiceGroup().getMaxPlayers()
 
         if (playerInfo != null && playerInfo.isNotEmpty()) {
-            val playerInfoString = ProxyHandler.replaceString(playerInfo.joinToString("\n"))
-            val sample = arrayOf(ServerPing.PlayerInfo(playerInfoString, ""))
-            response.players = ServerPing.Players(maxPlayers, onlinePlayers, sample)
-
-            return
+            val nullArrayPlayerInfo = arrayOfNulls<ServerPing.PlayerInfo>(playerInfo.size)
+            for (i in nullArrayPlayerInfo.indices) nullArrayPlayerInfo[i] =
+                ServerPing.PlayerInfo(playerInfo[i], "0-0-0-0-0")
+            response.players = ServerPing.Players(maxPlayers, onlinePlayers, nullArrayPlayerInfo)
         }
 
         response.players.max = maxPlayers
